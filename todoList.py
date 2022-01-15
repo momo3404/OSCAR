@@ -34,13 +34,14 @@ client.run(os.getenv('TOKEN'))
 # 
 # ----------------------
 def addToDo(arg1):
-
+    
 
     pass
 
 
 def display():
     pass
+
 
 #just putting pass so it doesnt get syntax error
 # thanks!

@@ -1,5 +1,6 @@
 import os
 import discord, json
+import time, asyncio
 from discord.ext import commands
 from discord.ext.commands import Bot
 
@@ -48,9 +49,17 @@ def display():
 
 # remind starts here
 @client.command()
-async def setrems(ctx, message):
-  await ctx.send('reminder set')
-  await ctx.send(message)
+async def setrem(ctx, message, minutes):
+  if minutes == '1':
+    await ctx.send('Setting reminder "{}" to alert in {} minute'.format(message, minutes))
+  else:
+    await ctx.send('Setting reminder "{}" to alert in {} minute'.format(message, minutes))
+  await asyncio.sleep(int(minutes)*60)
+  await ctx.send('Reminder: {}'.formtat(message))
+
+@client.command()
+async def test(ctx):
+  await ctx.send('tester')
 
 # remind finishes here
 
