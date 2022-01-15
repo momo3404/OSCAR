@@ -17,10 +17,15 @@ async def play(ctx, url):
     voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
     if voice.is_paused():
       voice.resume()
-    
 
   @client.command()
   async def stop(ctx):
     voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
     if voice.is_connected():
-      await voice.disconnect
+      await voice.disconnect()
+
+  @client.command()
+  async def pause(ctx):
+    voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
+    if voice.is_playing():
+      voice.pause()

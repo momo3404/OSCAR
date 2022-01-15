@@ -1,5 +1,5 @@
 import os
-import discord, json, youtube_dl, platform, nacl
+import discord, json, platform, nacl, youtube_dl
 import time, asyncio, datetime
 from datetime import datetime
 from discord.ext import commands
@@ -78,13 +78,6 @@ async def settimer(ctx, message, minutes):
   await asyncio.sleep(int(minutes)*60)
   await ctx.send('{} Reminder: {}'.format(ctx.message.author.mention, message))
 
-async def setalarm(ctx, message, times):
-  await ctx.send('Setting reminder "{}" to alert at {}'.format(message, times))
-  now = datetime.now()
-  current_time = now.strftime("%H:%M:%S") 
-  print(current_time)
-  if current_time == times:
-    await ctx.send('{} Reminder: {}'.format(ctx.message.author.mention, message))
 
 @client.command()
 async def test(ctx):

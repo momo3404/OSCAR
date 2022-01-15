@@ -16,11 +16,13 @@ async def setrem(ctx, message, minutes):
 async def test(ctx):
   await ctx.send('tester')
 
-async def setalarm(ctx, message, time):
+@client.command()
+async def setalarm(ctx, message, times):
+  await ctx.send('Setting reminder "{}" to alert at {}'.format(message, times))
   now = datetime.now()
-  current_time = now.strftime("%H:%M:%S") 
-  print(current_time)
-  if current_time == time:
+  current_time = now.strftime("%H:%M:%S")
+   
+  if current_time == times:
     await ctx.send('{} Reminder: {}'.format(ctx.message.author.mention, message))
 
 

@@ -7,6 +7,8 @@ authors = ["momo3404 <<>>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 discord = "^1.7.3"
+google-api-python-client = "^2.35.0"
+youtube_dl = "^2021.12.17"
 
 [tool.poetry.dev-dependencies]
 
