@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from discord.ext.commands import Bot
+import json
 
 
 
@@ -22,11 +23,25 @@ client = commands.Bot(command_prefix = "/")
 async def todo(ctx, arg1):
     if arg1 == "add":
         await ctx.send("toDO add")
-    return
-
+    elif arg1 == "display":
+        await ctx.send("display")
+    else:
+        await ctx.send("something else")
 client.run(os.getenv('TOKEN'))
     
+# ----------------------
+# add arg1 to the db
+# 
+# ----------------------
+def addToDo(arg1):
 
 
+    pass
 
+
+def display():
+    pass
+
+#just putting pass so it doesnt get syntax error
+# thanks!
 
