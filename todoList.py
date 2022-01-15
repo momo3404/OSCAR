@@ -6,7 +6,20 @@ import json
 
 
 
-db = []  # or mongodb
+db = dict()  # or mongodb
+
+
+"""
+dictionnary of <string, sets<string>>
+db = {
+    "user1": {"todo1", "todo2", ...}
+    "user2": {}
+    .
+    .
+    .
+}
+
+"""
 
 
 client = commands.Bot(command_prefix = "/")
@@ -21,28 +34,40 @@ client = commands.Bot(command_prefix = "/")
 # -------------------------------
 @client.command()
 async def todo(ctx, arg1):
+    author = ctx.message.author
+
     if arg1 == "add":
-        await ctx.send("toDO add")
+        await addToDo(arg1, author)
+        await ctx.send("added!")
     elif arg1 == "display":
-        await ctx.send("display")
+        await ctx.send("displaying...")
+        for item in db[author]:
+            await ctx.send(item)
     else:
         await ctx.send("something else")
-client.run(os.getenv('TOKEN'))
+
     
 # ----------------------
-# add arg1 to the db
+# add msg to the db written by author
 # 
 # ----------------------
-def addToDo(arg1):
-    
+def addToDo(msg, author):
+    if (author in db.keys()):
+        db[author].add(msg)
+    else: # case: this is new person
+        db[author] = {msg}
+# -----------------------
+# displays their current todo list
+# 
+# -------------------
+def display(author, ctx):
+    for item in db[author]:
+        await ctx.send(item, "\n")
+        
 
-    pass
-
-
-def display():
-    pass
 
 
 #just putting pass so it doesnt get syntax error
 # thanks!
 
+#client.run(os.getenv('TOKEN'))
