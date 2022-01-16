@@ -287,6 +287,7 @@ async def commands(ctx):
   await ctx.send('/pause - pauses current playing music')
   await ctx.send('/resume - resumes current playing music')
   await ctx.send('/stop - stops playing music')
+  await ctx.send('/show [topic] - shows random image of topic')
   await ctx.send('/lily - provides motivation')
   
 # commands.py ends here
