@@ -2,13 +2,15 @@ client = commands.Bot(command_prefix = "/")
 
 @client.command()
 async def play(ctx, url):
-  song = os.path.isfile("music.mp3")
+  song = os.path.isfile("song.mp3")
   try:
     if song:
-      os.remove("music.mp3")
+      os.remove("song.mp3")
+  except PermissionError:
+    await ctx.send("Wait for the current playing music to end or use the 'stop' command")
     return
   
-  voice_channel = discord.utils.get(ctx.guild.voice_channels, name = "music")
+  voice_channel = discord.utils.get(ctx.guild.voice_channels, name = 'music')
   await voice_channel.connect()
   voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
 
