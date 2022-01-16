@@ -1,5 +1,5 @@
 import os
-import discord, json, platform, nacl, youtube_dl
+import discord, json, platform, youtube_dl  # removed nacl
 import time, asyncio, datetime
 from datetime import datetime
 from discord.ext import commands
@@ -41,26 +41,60 @@ async def todo(ctx, *arg):
     author = ctx.message.author
     print(author)
     if arg[0] == "add":
-        addToDo(arg[1], author)
+        # need to get all the string
+        todo_string = makeString(arg)
+        addToDo(todo_string, author)
         await ctx.send("added!")
-    elif arg[0] == "display":  # TODO: @ethanlim
+    elif arg[0] == "display":  
         await ctx.send("displaying...")
         # temporariry display them like this
+        i_ = 1
         for item in db[author]:
-            await ctx.send("%s" % item)
+            await ctx.send("%d. %s" % (i_, item["name"]))
+            i_ += 1
+    elif arg[0] == "remove":
+        print("line 56")
+        remove(arg, author)
     else:
         await ctx.send("something else")
+
+# -------------
+# concatenate all the parameter
+def makeString(arg):
+    s = arg[1]
+    for i in range(2, len(arg)):
+        s += " " + arg[i]
+    return s
+
+# -------------------
+# remove
+def remove(arg, author):
+    list_todo = db[author]
+    # remove all todo list at that index
+    # super inefficient method
+    newlist = []
+    removeIndices = arg[1:]  # indexes to remove
+    # conver elment to int
+    removeIndices = list(map(int , removeIndices))  
+    print(arg)
+    print(removeIndices)
+    for i in range(0, len(list_todo)):
+        if (i + 1) not in removeIndices:
+            newlist.append(list_todo[i])
+    db[author] = newlist  # new list with removed indices
+    print("line 81")
+   
+
 # ----------------------
 # add msg to the db written by author
 # 
 # ----------------------
 def addToDo(msg, author):
-    if (author in db.keys()):
-        db[author].add(msg)
+    if (author in db.keys()):  # user exist
+        if {"name": msg} not in db[author]:
+            db[author].append({"name": msg})
     else: # case: this is new person
-        db[author] = {msg}
-
-
+        db[author] = [{"name": msg}]
 def display():
     pass
 
@@ -107,7 +141,7 @@ async def showpic(ctx, *, search):
                            cx="b05c6ba6fc551be3d",
                            searchType="image").execute()
     url = result["items"][random_value]["link"]
-    embed1 = discord.Embed(title=f"Here Is Your Image ({search.title()})")
+    embed1 = discord.Embed(title=f"Here is a ({search.title()})")
     embed1.set_image(url=url)
     await ctx.send(embed=embed1)
 
@@ -168,4 +202,19 @@ async def play(ctx, url):
       voice.pause()
 # music.py ends here
 
+# commands.py starts here
+@client.command()
+async def commands(ctx):
+  await ctx.send("OSCAR Bot Commands:")
+  await ctx.send("/settimer [message] [time (minutes)] - sets a message to be displayed after a certian number of minutes")
+  await ctx.send('/todo add [task] - adds task to todo list')
+  await ctx.send('/todo remove [task] - removes task to todo list')
+  await ctx.send('/todo display - displays all current tasks on todo list')
+  await ctx.send('/play [url] - starts playing music from url')
+  await ctx.send('/pause - pauses current playing music')
+  await ctx.send('/resume - resumes current playing music')
+  await ctx.send('/stop - stops playing music')
+  await ctx.send('/lily - provides motivation')
+  
+# commands.py ends here
 client.run(os.getenv("TOKEN"))
