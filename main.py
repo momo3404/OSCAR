@@ -53,8 +53,12 @@ async def todo(ctx, *arg):
             await ctx.send("%d. %s" % (i_, item["name"]))
             i_ += 1
     elif arg[0] == "remove":
-        print("line 56")
         remove(arg, author)
+        await ctx.send("removed! current tasks..")
+        i_ = 1
+        for item in db[author]:
+            await ctx.send("%d. %s" % (i_, item["name"]))
+            i_ += 1
     else:
         await ctx.send("something else")
 
@@ -76,13 +80,11 @@ def remove(arg, author):
     removeIndices = arg[1:]  # indexes to remove
     # conver elment to int
     removeIndices = list(map(int , removeIndices))  
-    print(arg)
-    print(removeIndices)
     for i in range(0, len(list_todo)):
         if (i + 1) not in removeIndices:
             newlist.append(list_todo[i])
     db[author] = newlist  # new list with removed indices
-    print("line 81")
+
    
 
 # ----------------------
