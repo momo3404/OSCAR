@@ -15,10 +15,10 @@ client = commands.Bot(command_prefix = "/")
 
 db = dict()  # or mongodb
 """
-dictionnary of <string, sets<string>>
+dictionnary of <string, List<dict<string, string>>>
 db = {
-    "user1": {"todo1", "todo2", ...}
-    "user2": {}
+    "user1": [{"name": "todo1"}, "name": "todo2", ...]
+    "user2": []
     .
     .
     .
@@ -44,21 +44,54 @@ async def todo(ctx, *arg):
         lastarg = arg[-1]
         valid = ["h", "w", "m", "y", "d"]
 
+        num = lastarg[:-1]  # time flag
+        try:  # check if the time they entered is valid
+            num = int(num)
+            if (lastarg[-1] not in valid):
+                print("invalid line 51")
+                await ctx.send("invalid add format, please do /help")
+                return
+        except:
+            print("invalid line 55")
+            await ctx.send("invalid add format, please do /help")
+            return
+        minutes = computeMinute(lastarg) 
         # need to get all the string
-        todo_string = makeString(arg)
+        todo_string = makeString(arg[:-1]) # extract the task string
         addToDo(todo_string, author)
         await ctx.send("added!")
-        await ctx.invoke(client.get_command('settimer'), message=todo_string, minutes=1)  # call "settimer" method
+        await ctx.invoke(client.get_command('settimer'), message=todo_string, minutes=minutes)  # call "settimer" method
         print("line 49")
     elif arg[0] == "display":  
         await ctx.send("displaying...")
+        if (author not in db.keys()):
+            await ctx.send("no tasks in todo list")
+            return
+        if (len(db[author]) == 0):
+            await ctx.send("no tasks in todo list")
+            return
+
         # temporariry display them like this
         i_ = 1
         for item in db[author]:
             await ctx.send("%d. %s" % (i_, item["name"]))
             i_ += 1
+        
     elif arg[0] == "remove":
-        remove(arg, author)
+        if (author not in db.keys()):
+            await ctx.send("todo list empty, can't remove anything")
+            return
+        if (len(db[author]) == 0):
+            await ctx.send("todo list empty, can't remove anything")
+            return
+        flag = remove(arg, author)
+        if (flag == False):
+            await ctx.send("invalid task to remove, please use index (1...) within range")
+            return
+        if (flag == "invalid arg"):
+            await ctx.send("please choose the index to remove")
+            return
+
         await ctx.send("removed! current tasks..")
         i_ = 1
         for item in db[author]:
@@ -66,6 +99,29 @@ async def todo(ctx, *arg):
             i_ += 1
     else:
         await ctx.send("something else")
+
+def computeMinute(time_):
+    if (time_[-1] == 'h'):  # case: __hour
+        # hour to minute
+        time_string = time_[: -1]  # everying but last char
+        time_int = int(time_string)
+        return time_int * 60
+    elif (time_[-1] == "w"):  # case: __ week
+        time_string = time_[: -1]
+        time_int = int(time_string)
+        return time_int * 10080
+    elif (time_[-1] == "m"): # case: __mimutes
+        time_string = time_[:-1]
+        time_int = int(time_string)
+        return time_int
+    elif (time_[-1] == "y"):  #c case: __ year
+        time_string = time_[:-1]
+        time_int = int(time_string)
+        return time_int * 525600
+    elif (time_[-1] == "d"):  #case: __day
+        time_string = time_[:-1]
+        time_int = int(time_string)
+        return time_int * 1440
 
 # -------------
 # concatenate all the parameter
@@ -83,12 +139,22 @@ def remove(arg, author):
     # super inefficient method
     newlist = []
     removeIndices = arg[1:]  # indexes to remove
+    if (len(removeIndices) == 0):
+        return "invalid arg"
     # conver elment to int
+    for index in removeIndices:
+        # index out of bound check
+        if int(index) > (len(list_todo)):
+            return False
+        elif int(index) < 1:
+            return False
     removeIndices = list(map(int , removeIndices))  
     for i in range(0, len(list_todo)):
         if (i + 1) not in removeIndices:
             newlist.append(list_todo[i])
     db[author] = newlist  # new list with removed indices
+
+    return True
 
    
 
@@ -214,8 +280,8 @@ async def play(ctx, url):
 async def commands(ctx):
   await ctx.send("OSCAR Bot Commands:")
   await ctx.send("/settimer [message] [time (minutes)] - sets a message to be displayed after a certain number of minutes")
-  await ctx.send('/todo add [task] - adds task to todo list')
-  await ctx.send('/todo remove [task] - removes task to todo list')
+  await ctx.send('/todo add [task] [time]- adds task to todo list [time]: _w, _h, _m, _y, _d')
+  await ctx.send('/todo remove [task] - removes task to todo list. [task]: type a number between 1 and higher ')
   await ctx.send('/todo display - displays all current tasks on todo list')
   await ctx.send('/play [url] - starts playing music from url')
   await ctx.send('/pause - pauses current playing music')
