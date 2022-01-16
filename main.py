@@ -32,20 +32,24 @@ client = commands.Bot(command_prefix = "/")
 
 # activate via "/todo ... "
 # commands:
-#   /todo add [desc] [date time]
-#   /todo display   (in n)
-#   /tdo  
+#   /todo add [desc] [time] where time = _m/_h/_w/_m/_y
+#   /todo display   (in list)
+#   /todo remove [list of index to remove] 
 # -------------------------------
 @client.command()
 async def todo(ctx, *arg):
     author = ctx.message.author
     print(author)
     if arg[0] == "add":
+        lastarg = arg[-1]
+        valid = ["h", "w", "m", "y", "d"]
+
         # need to get all the string
         todo_string = makeString(arg)
         addToDo(todo_string, author)
         await ctx.send("added!")
-        #await ctx.invoke(client.get_command('settimer'), message=todo_string, minutes=1)
+        await ctx.invoke(client.get_command('settimer'), message=todo_string, minutes=1)  # call "settimer" method
+        print("line 49")
     elif arg[0] == "display":  
         await ctx.send("displaying...")
         # temporariry display them like this
@@ -144,7 +148,7 @@ async def showpic(ctx, *, search):
                            cx="b05c6ba6fc551be3d",
                            searchType="image").execute()
     url = result["items"][random_value]["link"]
-    embed1 = discord.Embed(title=f"Here is a {search.title()}")
+    embed1 = discord.Embed(title=f"Here is a(n) {search.title()}")
     embed1.set_image(url=url)
     await ctx.send(embed=embed1)
 
@@ -209,7 +213,7 @@ async def play(ctx, url):
 @client.command()
 async def commands(ctx):
   await ctx.send("OSCAR Bot Commands:")
-  await ctx.send("/settimer [message] [time (minutes)] - sets a message to be displayed after a certian number of minutes")
+  await ctx.send("/settimer [message] [time (minutes)] - sets a message to be displayed after a certain number of minutes")
   await ctx.send('/todo add [task] - adds task to todo list')
   await ctx.send('/todo remove [task] - removes task to todo list')
   await ctx.send('/todo display - displays all current tasks on todo list')

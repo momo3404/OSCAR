@@ -96,6 +96,9 @@ def display(author, ctx):
     pass
 
 
+def put
+
+
 
 #just putting pass so it doesnt get syntax error
 # thanks!
