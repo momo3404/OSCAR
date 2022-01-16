@@ -1,5 +1,5 @@
 import os
-import discord, json, platform, youtube_dl  # removed nacl
+import discord, json, platform, youtube_dl  
 import time, asyncio, datetime
 from datetime import datetime
 from discord.ext import commands
