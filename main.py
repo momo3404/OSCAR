@@ -45,6 +45,7 @@ async def todo(ctx, *arg):
         todo_string = makeString(arg)
         addToDo(todo_string, author)
         await ctx.send("added!")
+        #await ctx.invoke(client.get_command('settimer'), message=todo_string, minutes=1)
     elif arg[0] == "display":  
         await ctx.send("displaying...")
         # temporariry display them like this
@@ -143,7 +144,7 @@ async def showpic(ctx, *, search):
                            cx="b05c6ba6fc551be3d",
                            searchType="image").execute()
     url = result["items"][random_value]["link"]
-    embed1 = discord.Embed(title=f"Here is a ({search.title()})")
+    embed1 = discord.Embed(title=f"Here is a {search.title()}")
     embed1.set_image(url=url)
     await ctx.send(embed=embed1)
 
