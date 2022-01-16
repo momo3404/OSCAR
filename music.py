@@ -12,6 +12,17 @@ async def play(ctx, url):
   await voice_channel.connect()
   voice = discord.utils.get(client.voice_clients, guild = ctx.guild)
 
+
+  video_settings = {}
+  with youtube_dl.YoutubeDL(video_settings) as ydl:
+    ydl.download([url])
+
+  for file_name in os.listdir("./"):
+    if file_name.endswith(".mp3"):
+      os.rename(file_name, "music.mp3")
+  voice.play(discord.FFmpegPCMAudio("music.mp3"))
+
+
   @client.command()
   async def resume(ctx):
     voice = discord.utils.get(client.voice_clients, guild = ctx.guild)

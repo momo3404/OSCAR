@@ -6,8 +6,8 @@ from googleapiclient.discovery import build
 
 client = commands.Bot(command_prefix="/")
 
-search_engine_id = b05c6ba6fc551be3d
-api_key = AIzaSyBCvBjjP32dgS6HrYVbNmVDAVEFswsjPIU
+#search_engine_id = b05c6ba6fc551be3d
+#api_key = AIzaSyBCvBjjP32dgS6HrYVbNmVDAVEFswsjPIU
 
 
 @client.command(aliases=["show"])

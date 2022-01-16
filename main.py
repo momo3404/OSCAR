@@ -5,6 +5,9 @@ from datetime import datetime
 from discord.ext import commands
 from discord.ext.commands import Bot
 
+import random
+from googleapiclient.discovery import build
+
 client = commands.Bot(command_prefix = "/")
 
 
@@ -85,4 +88,34 @@ async def test(ctx):
 
 # remind finishes here
 
-client.run(os.getenv('TOKEN'))
+
+
+#image.py starts here
+
+@client.command()
+async def lily(ctx, *arg):
+  await ctx.send(file=discord.File("lily-2.jpg"))
+
+api_key = "AIzaSyBCvBjjP32dgS6HrYVbNmVDAVEFswsjPIU"
+
+
+@client.command(aliases=["show"])
+async def showpic(ctx, *, search):
+    ran = random.randint(0, 9)
+    resource = build("customsearch", "v1", developerKey=api_key).cse()
+    result = resource.list(q=f"{search}",
+                           cx="b05c6ba6fc551be3d",
+                           searchType="image").execute()
+    url = result["items"][ran]["link"]
+    embed1 = discord.Embed(title=f"Here Is Your Image ({search.title()})")
+    embed1.set_image(url=url)
+    await ctx.send(embed=embed1)
+
+client.run(os.getenv("TOKEN"))
+# image.py ends here
+
+
+# music.py starts here
+
+# music.py ends here
+
