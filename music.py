@@ -1,5 +1,5 @@
 client = commands.Bot(command_prefix = "/")
-
+import discord, os, youtube_dl
 @client.command()
 async def play(ctx, url):
   song = os.path.isfile("song.mp3")

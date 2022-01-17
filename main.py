@@ -49,11 +49,11 @@ async def todo(ctx, *arg):
             num = int(num)
             if (lastarg[-1] not in valid):
                 print("invalid line 51")
-                await ctx.send("invalid add format, please do /help")
+                await ctx.send("invalid add format, please do /commands")
                 return
         except:
             print("invalid line 55")
-            await ctx.send("invalid add format, please do /help")
+            await ctx.send("invalid add format, please do /commands")
             return
         minutes = computeMinute(lastarg) 
         # need to get all the string
