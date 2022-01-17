@@ -1,9 +1,4 @@
 discord.py
 python-dotenv
-os.python
-platform
-youtube_dl.py
-time.py
-asyncio.py
-datetime.py
+
 
