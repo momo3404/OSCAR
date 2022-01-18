@@ -203,11 +203,11 @@ async def test(ctx):
 async def lily(ctx, *arg):
   await ctx.send(file=discord.File("lily-2.jpg"))
 
-
+api_key = 'AIzaSyBCvBjjP32dgS6HrYVbNmVDAVEFswsjPIU'
 @client.command(aliases=["show"])
 async def showpic(ctx, *, search):
     random_value = random.randint(0, 9)
-    resource = build("customsearch", "v1", developerKey='api_key').cse()
+    resource = build("customsearch", "v1", developerKey=api_key).cse()
     result = resource.list(q=f"{search}",
                            cx="b05c6ba6fc551be3d",
                            searchType="image").execute()
